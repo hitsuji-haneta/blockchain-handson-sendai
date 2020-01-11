@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.4/dist/web3.min.js"></script>
+    <script type="text/javascript">
+      const web3 = new Web3(
+        new Web3.providers.HttpProvider('https://ropsten.infura.io/APIキー')
+      );
+
+      //コントラクトのアドレス
+      const address = '0x0423fcb70d7ada78cb532bd3446f6c5e133b425d';
+      //ABI情報
+      // const abi = [
+      //   {
+      //     constant: true,
+      //     inputs: [],
+      //     name: 'word',
+      //     outputs: [{ name: '', type: 'string' }],
+      //     payable: false,
+      //     stateMutability: 'view',
+      //     type: 'function'
+      //   },
+      //   {
+      //     inputs: [{ name: '_word', type: 'string' }],
+      //     payable: false,
+      //     stateMutability: 'nonpayable',
+      //     type: 'constructor'
+      //   },
+      //   {
+      //     constant: true,
+      //     inputs: [],
+      //     name: 'say',
+      //     outputs: [{ name: '', type: 'string' }],
+      //     payable: false,
+      //     stateMutability: 'view',
+      //     type: 'function'
+      //   }
+      // ];
+      const abi = [
+        [
+          {
+            constant: false,
+            inputs: [
+              {
+                internalType: 'string',
+                name: '_greeting',
+                type: 'string'
+              }
+            ],
+            name: 'setGreeting',
+            outputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+          },
+          {
+            inputs: [
+              {
+                internalType: 'string',
+                name: '_greeting',
+                type: 'string'
+              }
+            ],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'constructor'
+          },
+          {
+            constant: true,
+            inputs: [],
+            name: 'say',
+            outputs: [
+              {
+                internalType: 'string',
+                name: '',
+                type: 'string'
+              }
+            ],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+          }
+        ]
+      ];
+
+      //コントラクトのインスタンスを生成
+      const contract = web3.eth.contract(abi).at(address);
+
+      //コントラクトのsay関数を呼び出す
+      const word = contract.say.call();
+      console.log('word:', word); //"こんにちわ"
+    </script>
+  </head>
+  <body>
+    わわわ
+  </body>
+</html>
