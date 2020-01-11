@@ -6,13 +6,64 @@
 
 <script>
 import Web3 from "web3";
-let web3;
-if (typeof Web3 !== "undefined") {
-  web3 = new Web3(Web3.currentProvider);
+let web3js;
+if (typeof web3 !== "undefined") {
+  console.log(web3.currentProvider);
+  web3js = new Web3(web3.currentProvider);
 } else {
   alert("MetaMaskをインストールして下さい");
 }
-console.log(web3);
+const address = "0x1565BAEcC6C68620BD45347A96Aa6928b808464c";
+const abi = [
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: "string",
+        name: "_greeting",
+        type: "string"
+      }
+    ],
+    name: "setGreeting",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_greeting",
+        type: "string"
+      }
+    ],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "constructor"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "say",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string"
+      }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  }
+];
+const contract = new web3js.eth.Contract(abi, address);
+const say = async function() {
+  const message = await contract.methods.say().call();
+  console.log(message);
+}
+say();
 
 export default {
   name: "app",
