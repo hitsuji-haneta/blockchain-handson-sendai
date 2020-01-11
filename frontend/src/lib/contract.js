@@ -7,42 +7,28 @@ if (typeof window.web3 !== 'undefined') {
   alert('MetaMaskをインストールして下さい');
 }
 
-const address = '0x1565BAEcC6C68620BD45347A96Aa6928b808464c';
+const address = '0x507849CDb8115dA3Ff5967A59d6739C6377AbcA8';
 const abi = [
   {
     constant: false,
     inputs: [
       {
-        internalType: 'string',
-        name: '_greeting',
+        name: '_name',
         type: 'string'
       }
     ],
-    name: 'setGreeting',
+    name: 'setName',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function'
   },
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '_greeting',
-        type: 'string'
-      }
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor'
-  },
-  {
     constant: true,
     inputs: [],
-    name: 'say',
+    name: 'greet',
     outputs: [
       {
-        internalType: 'string',
         name: '',
         type: 'string'
       }
@@ -50,6 +36,17 @@ const abi = [
     payable: false,
     stateMutability: 'view',
     type: 'function'
+  },
+  {
+    inputs: [
+      {
+        name: '_name',
+        type: 'string'
+      }
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor'
   }
 ];
 const contract = new web3.eth.Contract(abi, address);

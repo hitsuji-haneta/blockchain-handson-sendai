@@ -15,7 +15,7 @@ export default {
     };
   },
   mounted: async function() {
-    this.message = await contract.methods.say().call();
+    this.message = await contract.methods.greet().call();
   }
 };
 </script>
