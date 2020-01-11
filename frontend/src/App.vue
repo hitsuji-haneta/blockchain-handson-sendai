@@ -5,6 +5,15 @@
 </template>
 
 <script>
+import Web3 from "web3";
+let web3;
+if (typeof Web3 !== "undefined") {
+  web3 = new Web3(Web3.currentProvider);
+} else {
+  alert("MetaMaskをインストールして下さい");
+}
+console.log(web3);
+
 export default {
   name: "app",
   components: {}
