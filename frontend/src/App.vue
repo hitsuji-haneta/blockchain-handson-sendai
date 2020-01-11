@@ -6,10 +6,9 @@
 
 <script>
 import Web3 from "web3";
-let web3js;
-if (typeof web3 !== "undefined") {
-  console.log(web3.currentProvider);
-  web3js = new Web3(web3.currentProvider);
+let web3;
+if (typeof window.web3 !== "undefined") {
+  web3 = new Web3(window.web3.currentProvider);
 } else {
   alert("MetaMaskをインストールして下さい");
 }
@@ -58,7 +57,7 @@ const abi = [
     type: "function"
   }
 ];
-const contract = new web3js.eth.Contract(abi, address);
+const contract = new web3.eth.Contract(abi, address);
 const say = async function() {
   const message = await contract.methods.say().call();
   console.log(message);
