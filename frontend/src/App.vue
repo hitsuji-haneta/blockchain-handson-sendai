@@ -10,6 +10,7 @@
 
 <script>
 import { contract, getCoinbase } from "./lib/contract";
+// import { contract, getCoinbase, CHARGE } from "./lib/contract2";
 
 export default {
   name: "app",
@@ -26,19 +27,20 @@ export default {
   methods: {
     setName: async function() {
       console.log(this.name);
-      this.status = '名前を変更中…';
+      this.status = "名前を変更中…";
       const from = await getCoinbase();
       contract.methods
         .setName(this.name)
         .send({ from })
+        // .send({ from, value: CHARGE })  //contract2用
         .on("receipt", receipt => {
           console.log(receipt);
-          this.status = '成功しました！😆';
+          this.status = "成功しました！😆";
           this.greet();
         })
         .on("error", error => {
           console.log(error);
-          this.status = '失敗しました😢';
+          this.status = "失敗しました😢";
         });
     },
     changeName: function(event) {
