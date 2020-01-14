@@ -51,7 +51,7 @@ const abi = [
 ];
 export const contract = new web3.eth.Contract(abi, address);
 
-export const getCoinbase = async () => {
+export const getAccount = async () => {
   const accounts = await web3.eth.getAccounts();
   if (accounts.length === 0 || !accounts[0]) {
     throw new Error('Ethereumアカウントが空です。');

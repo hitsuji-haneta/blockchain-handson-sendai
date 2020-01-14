@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import { contract, getCoinbase } from "./lib/contract";
-// import { contract, getCoinbase, CHARGE } from "./lib/contract2";
+import { contract, getAccount } from "./lib/contract";
+// import { contract, getAccount, CHARGE } from "./lib/contract2";
 
 export default {
   name: "app",
@@ -28,7 +28,7 @@ export default {
     setName: async function() {
       console.log(this.name);
       this.status = "名前を変更中…";
-      const from = await getCoinbase();
+      const from = await getAccount();
       contract.methods
         .setName(this.name)
         .send({ from })

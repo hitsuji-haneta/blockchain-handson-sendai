@@ -68,10 +68,10 @@ $ npm run serve
 ```
 → https://localhost/8080 で確認できたらOK。  
 
-### Hello.greetメソッドの呼び出し
+### メッセージの取得
 1. コントラクト使用モジュールを作成します。  
 → `frontend/src/lib/contract.js`として以下を作成してください。
-```
+```frontend/src/lib/contract.js
 import Web3 from 'web3';
 
 let web3;
@@ -93,7 +93,7 @@ export const contract = new web3.eth.Contract(abi, address);
 
 2. 作成したモジュールを使用してコントラクトからHello.greetメソッドを呼び出します。  
 `frontend/src/App.vue`を以下のように書き換えてください。  
-```
+```frontend/src/App.vue
 <template>
   <div id="app">
     <h1>{{message}}</h1>
