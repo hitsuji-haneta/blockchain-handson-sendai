@@ -18,18 +18,30 @@
 pragma solidity ^0.5.0;
 
 contract Hello {
+  address payable internal owner;
   string name;
+  uint public balance;
 
   constructor (string memory _name) public {
     name = _name;
+    owner = msg.sender;
   }
 
-  function setName(string memory _name) public {
+  function setName(string memory _name) public payable {
+    require(msg.value == 0.01 ether, "料金は0.01ETHです。");
+    balance += msg.value;
     name = _name;
   }
 
   function greet() public view returns (string memory) {
     return string(abi.encodePacked(bytes("Hello, "), bytes(name)));
+  }
+
+  function withdraw() public {
+    require(msg.sender == owner, "オーナー以外は引き出しできません。");
+    uint amount = balance;
+    balance = 0;
+    owner.transfer(amount);
   }
 }
 ```
@@ -92,7 +104,7 @@ export const contract = new web3.eth.Contract(abi, address);
 ![abi取得](./image/3-2.png)  
 
 2. 作成したモジュールを使用してコントラクトからHello.greetメソッドを呼び出します。  
-`frontend/src/App.vue`を以下のように書き換えてください。  
+→ `frontend/src/App.vue`を以下のように書き換えてください。  
 ```frontend/src/App.vue
 <template>
   <div id="app">
@@ -126,3 +138,93 @@ export default {
 
 3. 起動してこんな感じになったら成功！  
 ![greet取得](./image/4-1.png)  
+
+## メッセージの変更
+1. Metamaskからアカウントを取得するメソッドを作ります。  
+→ `frontend/src/lib/contract.js`に以下を追加してください。  
+```frontend/src/lib/contract.js
+  export const contract = new web3.eth.Contract(abi, address);
+
++ export const getAccount = async () => {
++   const accounts = await web3.eth.getAccounts();
++   if (accounts.length === 0 || !accounts[0]) {
++     throw new Error('Ethereumアカウントが空です。');
++   }
++   return accounts[0];
++ };
+
++ export const CHARGE = Web3.utils.toWei('0.01', 'ether');
+```
+
+2. 名前入力用のフォームを作ります。  
+→ `frontend/src/App.vue`に以下を追加してください。  
+```frontend/src/App.vue
+...
+      <h1>{{message}}</h1>
++     <p>{{name}}</p>
++     <input type="text" v-on:input="changeName" />
++     <button v-on:click="setName">名前を登録</button>
++     <p>{{status}}</p>
+    </div>
+
+...
+
+    data() {
+      return {
++       name: "",
++       status: "",
+        message: ""
+      };
+    },
+    mounted: async function() {
+      this.greet();
+    },
+    methods: {
++     setName: async function() {
++       console.log(this.name);
++     },
++     changeName: function(event) {
++       this.name = event.target.value;
++     },
+      greet: async function() {
+        this.message = await contract.methods.greet().call();
+      }
+```
+→ 名前が入力できるようになったらOK！  
+
+3. 名前変更のコントラクトを実行  
+→ `frontend/src/App.vue`を以下のように変更してください。  
+```
+...
+
+<script>
+- import { contract } from "./lib/contract";
++ import { contract, getAccount, CHARGE } from "./lib/contract";
+
+...
+
+      mounted: async function() {
+        this.greet();
++       this.status = "名前を変更中…";
++       const from = await getAccount();
++       contract.methods
++         .setName(this.name)
++         .send({ from, value: CHARGE })
++         .on("receipt", receipt => {
++           console.log(receipt);
++           this.status = "成功しました！😆";
++           this.greet();
++         })
++         .on("error", error => {
++           console.log(error);
++           this.status = "失敗しました😢";
++         });
+      },
+```
+
+4. こんな感じで動いたら成功！  
+![メッセージ変更](./image/5-1.gif)  
+
+## チャレンジ課題
+フロントエンドに引き落とし用のボタンを作り、お金を引き落とせるようにしてみましょう！  
+ヒント：Hello.withdraw()を使用します。
