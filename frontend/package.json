@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.4.4",
     "vue": "^2.6.10",
+    "vue-router": "^3.1.4",
     "web3": "^1.2.4"
   },
   "devDependencies": {
@@ -40,5 +41,8 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "resolutions": {
+    "**/**/fsevents": "^1.2.9"
+  }
 }
