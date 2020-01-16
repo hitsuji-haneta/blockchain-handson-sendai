@@ -81,7 +81,7 @@ $ npx @vue/cli create frontend
 $ cd frontend
 $ npm run serve
 ```
-→ https://localhost/8080 で確認できたらOK。  
+→ http://localhost:8080 で確認できたらOK。  
 
 ### メッセージの取得
 1. コントラクト使用モジュールを作成します。  
